@@ -1,0 +1,23 @@
+import tkinter as tk 
+  import time
+
+  #create the main window
+  root=tk.Tk()
+  root.title("Digital Clock")
+
+  #define a function to update the time
+  def update_time():
+current_time=time.strftime("%H:%M:%S %p") #get the current time 
+  clock_label.config(text=current_time) #Update the clock label
+  clock_label.after(1000, update_time) #Call the function every 1000ms(1 second)
+
+  #create a label to display the time 
+  clock_label=tk.label(root, font=("Helvetica", 48), background="black", foreground="white")
+  clock_label.pack()
+
+  #start the clock
+  update_time()
+
+  #run the TKinter event loop
+  root.mainloop()
+  
