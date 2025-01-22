@@ -1,0 +1,45 @@
+import random
+
+def player(prev_play, opponent_history=[]):
+    if prev_play:
+        opponent_history.append(prev_play)
+    else:
+        # Reset opponent history at the start of a new match
+        opponent_history.clear()
+
+    # Default move (Rock)
+    next_move = "R"
+
+    if len(opponent_history) >= 4:
+        # Analyze the last four moves of the opponent
+        last_four = "".join(opponent_history[-4:])
+
+        # Strategy against Quincy (repeats R, R, P, P, S)
+        if last_four in ["RRPP", "PPSS", "SSRR"]:
+            next_move = "P"  # Play Paper to counter Quincy's next expected move
+
+        # Strategy against Abbey (Markov chain based on your last two moves)
+        elif last_four[-2:] == "RS":
+            next_move = "P"  # Play Paper to counter Abbey's predicted move
+        elif last_four[-2:] == "SP":
+            next_move = "R"  # Play Rock to counter Abbey's predicted move
+        elif last_four[-2:] == "PR":
+            next_move = "S"  # Play Scissors to counter Abbey's predicted move
+
+        # Strategy against Kris (plays the move that would have beaten your last move)
+        elif last_four[-1] == "R":
+            next_move = "P"  # Play Paper to counter Kris's expected move
+        elif last_four[-1] == "P":
+            next_move = "S"  # Play Scissors to counter Kris's expected move
+        elif last_four[-1] == "S":
+            next_move = "R"  # Play Rock to counter Kris's expected move
+
+        # Strategy against Mrugesh (history-based strategy)
+        elif last_four.count("R") > last_four.count("P") and last_four.count("R") > last_four.count("S"):
+            next_move = "P"  # Play Paper to counter Mrugesh's likely Rock
+        elif last_four.count("P") > last_four.count("S"):
+            next_move = "S"  # Play Scissors to counter Mrugesh's likely Paper
+        else:
+            next_move = "R"  # Play Rock to counter Mrugesh's likely Scissors
+
+    return next_move
